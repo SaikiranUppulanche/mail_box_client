@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Loader from "./Loader";
-// import { authHandler } from "../store/authActions";
+import { authHandler } from "../store/authActions";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -13,11 +13,10 @@ const SignUpForm = () => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [loginPage, setLoginPage] = useState(false);
-  // const loader = useSelector((state) => state.auth.loader);
-  const loader = false;
+  const loader = useSelector((state) => state.auth.loader);
 
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoginPage(true);
@@ -55,7 +54,7 @@ const SignUpForm = () => {
     ) {
       return alert("Please enter correct password");
     }
-    // dispatch(authHandler({ email, password, loginPage, navigate }));
+    dispatch(authHandler({ email, password, loginPage, navigate }));
 
     setEmail("");
     setPassword("");
@@ -124,7 +123,7 @@ const SignUpForm = () => {
               {loader && ""}
             </button>
             <button className=" text-blue-500 underline">
-              {/* {loginPage && <Link to="/forget-password">Forget Password</Link>} */}
+              {loginPage && <Link to="/forget-password">Forget Password</Link>}
             </button>
           </form>
 
