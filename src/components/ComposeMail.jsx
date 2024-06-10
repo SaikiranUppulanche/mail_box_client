@@ -34,7 +34,7 @@ const ComposeMail = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className=" flex flex-col p-10">
+    <form onSubmit={handleSubmit(onSubmit)} className=" flex flex-col px-10">
       <label className=" text-gray-500 border-b-2 pb-2">
         To
         <input

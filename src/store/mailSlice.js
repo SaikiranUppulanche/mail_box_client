@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   mailData: [],
+  inboxData: [],
 };
 
 const mailSlice = createSlice({
@@ -11,8 +12,11 @@ const mailSlice = createSlice({
     addMail(state, action) {
       state.mailData.push(action.payload);
     },
+    fetchInboxData(state, action) {
+      state.inboxData = action.payload;
+    },
   },
 });
 
-export const { addMail } = mailSlice.actions;
+export const { addMail, fetchInboxData } = mailSlice.actions;
 export default mailSlice;

@@ -1,4 +1,4 @@
-import { addMail } from "./mailSlice";
+import { addMail, fetchInboxData } from "./mailSlice";
 
 const emailChanger = (str) => {
   let updatedStr = "";
@@ -15,9 +15,9 @@ export const mailHandler = (mailObj) => {
   const receiverEmail = emailChanger(email);
 
   return async (dispatch) => {
-    const receiveData = async () => {
+    const sentData = async () => {
       const res = await fetch(
-        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${receiverEmail}/Email/received.json`,
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${receiverEmail}/Email/sent.json`,
         {
           method: "POST",
           body: JSON.stringify(mailObj),
@@ -38,10 +38,10 @@ export const mailHandler = (mailObj) => {
         throw new Error(errorMsg);
       }
     };
-    const sentData = async () => {
+    const receivedData = async () => {
       const senderEmail = localStorage.getItem("email");
       const res = await fetch(
-        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${senderEmail}/Email/sent.json`,
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${senderEmail}/Email/received.json`,
         {
           method: "POST",
           body: JSON.stringify(mailObj),
@@ -65,8 +65,47 @@ export const mailHandler = (mailObj) => {
     };
 
     try {
+      await receivedData();
       await sentData();
-      await receiveData();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+};
+
+export const fetchInbox = () => {
+  return async (dispatch) => {
+    const fetchHandler = async () => {
+      const email = localStorage.getItem("email");
+      const res = await fetch(
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${email}/Email/sent.json`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        return data;
+      } else {
+        const data = await res.json();
+        let errorMsg = "Failed to fetch inbox";
+        if (data && data.error && data.error.message) {
+          errorMsg = data.error.message;
+        }
+        throw new Error(errorMsg);
+      }
+    };
+    try {
+      const inboxData = await fetchHandler();
+      console.log(inboxData);
+      let inboxArr = [];
+      for (const key in inboxData) {
+        const inbox = {
+          ...inboxData[key],
+          key: key,
+        };
+        inboxArr.push(inbox);
+      }
+      console.log(inboxArr);
+      dispatch(fetchInboxData(inboxArr));
     } catch (error) {
       alert(error.message);
     }
