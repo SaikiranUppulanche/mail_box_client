@@ -66,10 +66,10 @@ const SignUpForm = () => {
       {loader ? (
         <Loader />
       ) : (
-        <div className=" h-screen flex flex-col justify-center items-center ">
+        <div className="h-screen flex flex-col justify-center items-center ">
           <form
             onSubmit={handleSubmit}
-            className="px-2 w-1/2 h-[65vh] flex max-w-sm py-12 flex-col items-center border-2 border-gray-400 rounded-md "
+            className="px-2 w-1/2 h-[65vh] flex max-w-sm py-12 flex-col items-center border-2 border-gray-400 rounded-md shadow-lg "
           >
             <h3 className="text-3xl pb-5">{loginPage ? "Login" : "Sign Up"}</h3>
             <input

@@ -2,7 +2,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 
 import SignUpPage from "./pages/SignUpPage";
-import WelocmePage from "./pages/WelocmePage";
+// import WelocmePage from "./pages/WelocmePage";
+import ComposeMail from "./components/ComposeMail";
 
 const router = createBrowserRouter([
   {
@@ -11,7 +12,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/welcome",
-    element: <WelocmePage />,
+    element: <ComposeMail />,
   },
 ]);
 
