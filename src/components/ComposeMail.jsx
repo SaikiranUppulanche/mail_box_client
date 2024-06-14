@@ -16,21 +16,36 @@ const ComposeMail = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
+    const senderEmail = localStorage.getItem("email");
     const plainContent = editorRef.current?.editor?.getText().trim();
     if (plainContent === "") {
       setEditorError("Enter valid message");
       return;
     }
     setEditorError("");
+    const now = new Date();
+    let time = `${now.toLocaleTimeString()}`;
+    let date = `${now.toDateString()}`;
+    let read = false;
+
+    console.log(date, time);
+
     const mailObj = {
       ...data,
+      senderEmail,
       content,
+      date,
+      time,
+      read,
     };
     dispatch(mailHandler(mailObj));
+    reset();
+    setContent("");
   };
 
   return (
@@ -66,7 +81,7 @@ const ComposeMail = () => {
           {...register("subject", {
             required: "Required*",
           })}
-          className="w-[90%] !outline-none py-3 ms-4 text-black"
+          className=" w-[90%] !outline-none py-3 ms-4 text-black"
         />
       </label>
       {errors.subject?.message && (

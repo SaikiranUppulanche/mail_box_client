@@ -1,13 +1,13 @@
 import { login, toggleLoader } from "./authSlice";
 
-const emailChanger = (str) => {
-  let updatedStr = "";
-  for (let s of str) {
-    if (s === "@" || s === ".") continue;
-    updatedStr += s;
-  }
-  return updatedStr;
-};
+// const emailChanger = (str) => {
+//   let updatedStr = "";
+//   for (let s of str) {
+//     if (s === "@" || s === ".") continue;
+//     updatedStr += s;
+//   }
+//   return updatedStr;
+// };
 
 export const authHandler = ({ email, password, loginPage, navigate }) => {
   return async (dispatch) => {
@@ -30,7 +30,7 @@ export const authHandler = ({ email, password, loginPage, navigate }) => {
       });
       if (res.ok) {
         const data = await res.json();
-        const updatedEmail = emailChanger(email);
+        const updatedEmail = email;
         dispatch(toggleLoader(false));
         localStorage.setItem("token", data.idToken);
         localStorage.setItem("email", updatedEmail);

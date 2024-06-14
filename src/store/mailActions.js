@@ -11,13 +11,14 @@ const emailChanger = (str) => {
 
 export const mailHandler = (mailObj) => {
   console.log(mailObj);
-  const { email } = mailObj;
+  const { email, senderEmail } = mailObj;
   const receiverEmail = emailChanger(email);
+  const sendersEmail = emailChanger(senderEmail);
 
   return async (dispatch) => {
-    const sentData = async () => {
+    const receivedData = async () => {
       const res = await fetch(
-        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${receiverEmail}/Email/sent.json`,
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${receiverEmail}/Email/received.json`,
         {
           method: "POST",
           body: JSON.stringify(mailObj),
@@ -38,10 +39,9 @@ export const mailHandler = (mailObj) => {
         throw new Error(errorMsg);
       }
     };
-    const receivedData = async () => {
-      const senderEmail = localStorage.getItem("email");
+    const sentData = async () => {
       const res = await fetch(
-        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${senderEmail}/Email/received.json`,
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${sendersEmail}/Email/sent.json`,
         {
           method: "POST",
           body: JSON.stringify(mailObj),
@@ -53,7 +53,7 @@ export const mailHandler = (mailObj) => {
       if (res.ok) {
         const data = await res.json();
         console.log(data);
-        dispatch(addMail(mailObj));
+        dispatch(addMail({ ...mailObj, id: data.name }));
       } else {
         const data = await res.json();
         let errorMsg = "Failed to send mail";
@@ -76,17 +76,17 @@ export const mailHandler = (mailObj) => {
 export const fetchInbox = () => {
   return async (dispatch) => {
     const fetchHandler = async () => {
-      const email = localStorage.getItem("email");
+      const email = emailChanger(localStorage.getItem("email"));
       const res = await fetch(
-        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${email}/Email/sent.json`
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${email}/Email/received.json`
       );
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
+        if (data === null || undefined) return;
         return data;
       } else {
         const data = await res.json();
-        let errorMsg = "Failed to fetch inbox";
+        let errorMsg = "No Messages to display";
         if (data && data.error && data.error.message) {
           errorMsg = data.error.message;
         }
@@ -95,12 +95,12 @@ export const fetchInbox = () => {
     };
     try {
       const inboxData = await fetchHandler();
-      console.log(inboxData);
+      if (inboxData === null || undefined) return;
       let inboxArr = [];
       for (const key in inboxData) {
         const inbox = {
           ...inboxData[key],
-          key: key,
+          id: key,
         };
         inboxArr.push(inbox);
       }
@@ -108,6 +108,33 @@ export const fetchInbox = () => {
       dispatch(fetchInboxData(inboxArr));
     } catch (error) {
       alert(error.message);
+    }
+  };
+};
+
+export const updateReadStatus = (mail) => {
+  return async () => {
+    try {
+      const email = emailChanger(localStorage.getItem("email"));
+      console.log(email);
+      const res = fetch(
+        `https://mailbox-d40d3-default-rtdb.firebaseio.com/${email}/Email/received/${mail.id}.json`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ read: true }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (res.ok) {
+        console.log(res);
+      } else {
+        throw new Error("Failed");
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 };

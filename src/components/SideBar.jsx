@@ -1,12 +1,21 @@
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 const SideBar = () => {
+  const inboxMails = useSelector((state) => state.mail.inboxData);
+  const unReadMessage = inboxMails.filter((mail) => mail.read !== true);
+
+  const activeLink =
+    "bg-gray-500 text-blue-500 bg-opacity-30 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer";
+  const normalLink =
+    "hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 bg-opacity-30 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer";
+
   return (
     <div className="px-4">
-      <div className="h-32 flex items-center">
-        <Link
-          to="/compose"
-          className="w-48 mx-auto bg-blue-500 hover:bg-blue-700 flex items-center justify-center text-gray-100 py-2 rounded space-x-2 transition duration-150"
+      <div className="flex items-center">
+        <NavLink
+          to="compose"
+          className="w-48 mx-auto mb-4 bg-blue-500 hover:bg-blue-700 flex items-center justify-center text-gray-100 py-2 rounded space-x-2 transition duration-150"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -23,14 +32,14 @@ const SideBar = () => {
             />
           </svg>
           <span>Compose</span>
-        </Link>
+        </NavLink>
       </div>
-      <div className="px-2 pt-4 pb-8 border-r  border-gray-300">
+      <div className="px-2 pb-8 border-r border-gray-300">
         <ul className="space-y-2">
           <li>
-            <Link
-              to="/inbox"
-              className="bg-gray-500 bg-opacity-30 text-blue-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+            <NavLink
+              to="inbox"
+              className={({ isActive }) => (isActive ? activeLink : normalLink)}
             >
               <span className="flex items-center space-x-2">
                 <svg
@@ -50,12 +59,12 @@ const SideBar = () => {
                 <span>Inbox</span>
               </span>
               <span className="bg-sky-500 text-gray-100 font-bold px-2 py-0.5 text-xs rounded-lg">
-                3
+                {unReadMessage.length} Unread
               </span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
+            <NavLink className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -71,10 +80,10 @@ const SideBar = () => {
                 />
               </svg>
               <span>Starred</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
+            <NavLink className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -90,13 +99,17 @@ const SideBar = () => {
                 />
               </svg>
               <span>Snoozed</span>
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link
-              to="/sent"
-              className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer"
+            <NavLink
+              to="sent"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-gray-500 text-blue-500 bg-opacity-30  flex items-center py-1.5 px-4 rounded space-x-2 cursor-pointer"
+                  : "hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer"
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,10 +126,10 @@ const SideBar = () => {
                 />
               </svg>
               <span>Sent</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center justify-between text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
+            <NavLink className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center justify-between text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
               <span className="flex items-center space-x-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -134,13 +147,13 @@ const SideBar = () => {
                 </svg>
                 <span>Drafts</span>
               </span>
-              <span className="bg-sky-500 text-gray-100 font-bold px-2 py-0.5 text-xs rounded-lg">
+              {/* <span className="bg-sky-500 text-gray-100 font-bold px-2 py-0.5 text-xs rounded-lg">
                 1
-              </span>
-            </Link>
+              </span> */}
+            </NavLink>
           </li>
           <li>
-            <Link className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
+            <NavLink className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -156,10 +169,10 @@ const SideBar = () => {
                 />
               </svg>
               <span>Spam</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
+            <NavLink className="hover:bg-gray-500 hover:bg-opacity-10 hover:text-blue-500 flex items-center text-gray-700 py-1.5 px-4 rounded space-x-2 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -175,7 +188,7 @@ const SideBar = () => {
                 />
               </svg>
               <span>Trash</span>
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>

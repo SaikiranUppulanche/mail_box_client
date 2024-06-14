@@ -1,22 +1,34 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchInbox, updateReadStatus } from "../store/mailActions";
+import { useEffect } from "react";
 
 // import { useEffect } from "react";
 // import { fetchInbox } from "../store/mailActions";
 
 const Inbox = () => {
-  //   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  //   useEffect(() => {
-  //     dispatch(fetchInbox());
-  //   }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchInbox());
+  }, [dispatch]);
+
   const data = useSelector((state) => state.mail.inboxData);
+
+  const readHandler = (mail) => {
+    dispatch(updateReadStatus(mail));
+    navigate(`inbox-message/${mail.id}`);
+  };
+
   console.log(data, "inbox data");
   return (
     <ul>
       {data &&
         data.map((item) => (
           <li
-            key={item.key}
+            onClick={() => readHandler(item)}
+            key={item.id}
             className="flex items-center border-y hover:bg-gray-200 px-2"
           >
             <input
@@ -25,41 +37,12 @@ const Inbox = () => {
             />
             <div className="w-full flex items-center justify-between p-1 my-1 cursor-pointer">
               <div className="flex items-center">
-                <div className="flex items-center mr-4 ml-1 space-x-1">
-                  <button title="Not starred">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="text-gray-500 hover:text-gray-900 h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                      />
-                    </svg>
-                  </button>
-                  <button title="Click to mark this email as important">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="text-gray-500 hover:text-gray-900 h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                      />
-                    </svg>
-                  </button>
+                <div className="flex items-center mr-3 ml-4 space-x-1">
+                  {!item.read && (
+                    <span className="w-2 h-2 rounded-full bg-blue-700 "></span>
+                  )}
                 </div>
-                <span className="w-56 pr-2 truncate">{item.email}</span>
+                <span className="w-56 pr-2 truncate">{item.senderEmail}</span>
                 <span className="w-64 truncate">{item.subject}</span>
                 <span className="mx-1">-</span>
                 <span
@@ -137,7 +120,7 @@ const Inbox = () => {
                     </svg>
                   </button>
                 </div>
-                <span className="text-sm text-gray-500">3:05 PM</span>
+                <span className="text-sm text-gray-500">{item.time}</span>
               </div>
             </div>
           </li>
