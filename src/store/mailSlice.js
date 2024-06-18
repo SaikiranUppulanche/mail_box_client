@@ -21,8 +21,14 @@ const mailSlice = createSlice({
         (item) => item.id === action.payload
       );
     },
+    updateInboxData(state, action) {
+      state.inboxData = state.inboxData.filter(
+        (mail) => mail.id !== action.payload
+      );
+    },
   },
 });
 
-export const { addMail, fetchInboxData, messageDisplay } = mailSlice.actions;
+export const { addMail, fetchInboxData, messageDisplay, updateInboxData } =
+  mailSlice.actions;
 export default mailSlice;

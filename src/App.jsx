@@ -12,6 +12,8 @@ import Inbox from "./components/Inbox";
 import InboxMessage from "./components/InboxMessage";
 import Sent from "./components/Sent";
 import AuthenticatedRoutes from "./components/AuthenticatedRoutes";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   { path: "/", element: <SignUpPage /> },
@@ -46,12 +48,13 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  // const dispatch = useDispatch();
+  const inboxMailData = useSelector((state) => state.mail.inboxData);
 
-  // useEffect(() => {
-  //   console.log("running");
-  //   dispatch(fetchInbox());
-  // }, [dispatch]);
+  useEffect(() => {
+    if (inboxMailData) {
+      console.log("changed");
+    }
+  }, [inboxMailData]);
 
   return (
     <div>

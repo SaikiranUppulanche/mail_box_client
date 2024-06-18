@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const SideBar = () => {
   const inboxMails = useSelector((state) => state.mail.inboxData);
-  const unReadMessage = inboxMails.filter((mail) => mail.read !== true);
+  const unReadMessage = inboxMails?.filter((mail) => mail.read !== true);
 
   const activeLink =
     "bg-gray-500 text-blue-500 bg-opacity-30 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer";

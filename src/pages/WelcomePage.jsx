@@ -11,8 +11,9 @@ const WelcomePage = () => {
 
   useEffect(() => {
     console.log("running");
+    navigate("/welcome/inbox");
     dispatch(fetchInbox());
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   const handleLogout = () => {
     dispatch(logout());

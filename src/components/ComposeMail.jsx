@@ -29,7 +29,10 @@ const ComposeMail = () => {
     }
     setEditorError("");
     const now = new Date();
-    let time = `${now.toLocaleTimeString()}`;
+    let time = `${now.toLocaleTimeString(navigator.language, {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
     let date = `${now.toDateString()}`;
     let read = false;
 

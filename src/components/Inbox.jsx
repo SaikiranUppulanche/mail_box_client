@@ -1,33 +1,40 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchInbox, updateReadStatus } from "../store/mailActions";
-import { useEffect } from "react";
-
+import { deleteInboxMail, updateReadStatus } from "../store/mailActions";
+// import { replaceData } from "../store/mailSlice";
 // import { useEffect } from "react";
+
 // import { fetchInbox } from "../store/mailActions";
 
 const Inbox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchInbox());
-  }, [dispatch]);
-
-  const data = useSelector((state) => state.mail.inboxData);
-
   const readHandler = (mail) => {
     dispatch(updateReadStatus(mail));
     navigate(`inbox-message/${mail.id}`);
   };
 
-  console.log(data, "inbox data");
+  const handleDelete = (mail) => {
+    dispatch(deleteInboxMail(mail.id));
+    console.log("delete working");
+    console.log(mail);
+  };
+
+  const inboxMailData = useSelector((state) => state.mail.inboxData);
+
+  // useEffect(() => {
+  //   if (inboxMailData) {
+  //     dispatch(replaceData());
+  //   }
+  // }, [dispatch, inboxMailData]);
+
+  // console.log(inboxMailData, "inboxData");
   return (
     <ul>
-      {data &&
-        data.map((item) => (
+      {inboxMailData &&
+        inboxMailData.toReversed().map((item) => (
           <li
-            onClick={() => readHandler(item)}
             key={item.id}
             className="flex items-center border-y hover:bg-gray-200 px-2"
           >
@@ -35,7 +42,10 @@ const Inbox = () => {
               type="checkbox"
               className="focus:ring-0 border-2 border-gray-400"
             />
-            <div className="w-full flex items-center justify-between p-1 my-1 cursor-pointer">
+            <div
+              onClick={() => readHandler(item)}
+              className="w-full flex items-center justify-between p-1 my-1 cursor-pointer"
+            >
               <div className="flex items-center">
                 <div className="flex items-center mr-3 ml-4 space-x-1">
                   {!item.read && (
@@ -120,9 +130,14 @@ const Inbox = () => {
                     </svg>
                   </button>
                 </div>
-                <span className="text-sm text-gray-500">{item.time}</span>
               </div>
             </div>
+            <button
+              onClick={() => handleDelete(item)}
+              className="rounded-md bg-red-600 w-20 text-lg text-white font-medium"
+            >
+              Delete
+            </button>
           </li>
         ))}
     </ul>

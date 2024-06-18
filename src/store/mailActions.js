@@ -1,4 +1,4 @@
-import { addMail, fetchInboxData } from "./mailSlice";
+import { addMail, fetchInboxData, updateInboxData } from "./mailSlice";
 
 const emailChanger = (str) => {
   let updatedStr = "";
@@ -135,6 +135,32 @@ export const updateReadStatus = (mail) => {
       }
     } catch (error) {
       console.log(error.message);
+    }
+  };
+};
+
+export const deleteInboxMail = (key) => {
+  return async (dispatch) => {
+    try {
+      const userEmail = emailChanger(localStorage.getItem("email"));
+      const deleteUrl = `https://mailbox-d40d3-default-rtdb.firebaseio.com/${userEmail}/Email/received/${key}.json`;
+
+      const res = await fetch(deleteUrl, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        // setExpenses((prevExpenses) =>
+        //   prevExpenses.filter((exp) => exp.key !== expense.key)
+        // );
+        dispatch(updateInboxData(key));
+      } else {
+        const data = await res.json();
+        let errorMsg = data.error.message;
+        throw new Error(errorMsg);
+      }
+    } catch (error) {
+      alert(error.message);
     }
   };
 };
