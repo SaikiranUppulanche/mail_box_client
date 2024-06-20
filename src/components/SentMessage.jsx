@@ -1,18 +1,19 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchInbox } from "../store/mailActions";
+import { fetchSent } from "../store/mailActions";
 
-const InboxMessage = () => {
+const SentMessage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     console.log("triggered in inbox message");
-    dispatch(fetchInbox());
+    dispatch(fetchSent());
   }, [dispatch]);
 
   const { id } = useParams();
-  const inboxMessageData = useSelector((state) => state.mail.inboxData);
+  const inboxMessageData = useSelector((state) => state.mail.sentData);
   const messageData = inboxMessageData.filter((message) => message.id === id);
+
   return (
     <>
       {messageData &&
@@ -27,7 +28,7 @@ const InboxMessage = () => {
                 <div className="flex flex-col ml-2">
                   <span className="text-sm font-semibold">{message.img}</span>
                   <span className="text-s text-gray-400">
-                    From: {message.senderEmail}
+                    To: {message.email}
                   </span>
                 </div>
               </div>
@@ -44,4 +45,4 @@ const InboxMessage = () => {
   );
 };
 
-export default InboxMessage;
+export default SentMessage;

@@ -2,13 +2,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteInboxMail, updateReadStatus } from "../store/mailActions";
 // import { replaceData } from "../store/mailSlice";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 
-// import { fetchInbox } from "../store/mailActions";
+import { fetchInbox } from "../store/mailActions";
 
 const Inbox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("triggered in inbox");
+    dispatch(fetchInbox());
+  }, [dispatch]);
 
   const readHandler = (mail) => {
     dispatch(updateReadStatus(mail));
@@ -17,8 +22,6 @@ const Inbox = () => {
 
   const handleDelete = (mail) => {
     dispatch(deleteInboxMail(mail.id));
-    console.log("delete working");
-    console.log(mail);
   };
 
   const inboxMailData = useSelector((state) => state.mail.inboxData);

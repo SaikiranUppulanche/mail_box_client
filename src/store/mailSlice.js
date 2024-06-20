@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   mailData: [],
   inboxData: [],
+  sentData: [],
   message: [],
 };
 
@@ -16,6 +17,9 @@ const mailSlice = createSlice({
     fetchInboxData(state, action) {
       state.inboxData = action.payload;
     },
+    fetchSentData(state, action) {
+      state.sentData = action.payload;
+    },
     messageDisplay(state, action) {
       state.message = state.inboxData.filter(
         (item) => item.id === action.payload
@@ -26,9 +30,20 @@ const mailSlice = createSlice({
         (mail) => mail.id !== action.payload
       );
     },
+    updateSentData(state, action) {
+      state.sentData = state.sentData.filter(
+        (mail) => mail.id !== action.payload
+      );
+    },
   },
 });
 
-export const { addMail, fetchInboxData, messageDisplay, updateInboxData } =
-  mailSlice.actions;
+export const {
+  addMail,
+  fetchInboxData,
+  fetchSentData,
+  messageDisplay,
+  updateInboxData,
+  updateSentData,
+} = mailSlice.actions;
 export default mailSlice;

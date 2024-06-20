@@ -10,9 +10,8 @@ const WelcomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("running");
-    navigate("/welcome/inbox");
     dispatch(fetchInbox());
+    navigate("/welcome/inbox");
   }, [dispatch, navigate]);
 
   const handleLogout = () => {
