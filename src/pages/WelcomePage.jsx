@@ -10,8 +10,14 @@ const WelcomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchInbox());
+    const timer = setInterval(() => {
+      dispatch(fetchInbox());
+    }, 2000);
+
     navigate("/welcome/inbox");
+    return () => {
+      clearInterval(timer);
+    };
   }, [dispatch, navigate]);
 
   const handleLogout = () => {

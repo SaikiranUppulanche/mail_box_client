@@ -72,7 +72,7 @@ export const mailHandler = (mailObj) => {
       await receivedData();
       await sentData();
     } catch (error) {
-      alert(error.message);
+      console.log("mail handler", error.message);
     }
   };
 };
@@ -108,10 +108,9 @@ export const fetchInbox = () => {
         };
         inboxArr.push(inbox);
       }
-      console.log(inboxArr);
       dispatch(fetchInboxData(inboxArr));
     } catch (error) {
-      alert(error.message);
+      console.log("fetchInbox", error.message);
     }
   };
 };
@@ -149,7 +148,7 @@ export const fetchSent = () => {
       console.log(sentArr);
       dispatch(fetchSentData(sentArr));
     } catch (error) {
-      alert(error.message);
+      console.log("fetch sent", error.message);
     }
   };
 };
@@ -200,7 +199,7 @@ export const deleteInboxMail = (key) => {
         throw new Error(errorMsg);
       }
     } catch (error) {
-      alert(error.message);
+      console.log("delete inbox", error.message);
     }
   };
 };
@@ -222,7 +221,7 @@ export const deleteSentMail = (key) => {
         throw new Error(errorMsg);
       }
     } catch (error) {
-      alert(error.message);
+      console.log("delete sent", error.message);
     }
   };
 };
